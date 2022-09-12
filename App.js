@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -25,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import deviceInfoModule from 'react-native-device-info';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,10 +55,15 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [uniqueId, setUniqueId] = useState('-');
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  deviceInfoModule.getUniqueId().then(key => {
+    setUniqueId(key);
+  });
+  let deviceId = deviceInfoModule.getDeviceId();
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -70,6 +76,8 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Text style={{fontSize: 20}}>UNIQUE ID:{uniqueId}</Text>
+          <Text style={{fontSize: 20}}>DEVICE ID:{deviceId}</Text>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
